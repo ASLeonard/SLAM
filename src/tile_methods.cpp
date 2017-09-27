@@ -147,9 +147,9 @@ int loop_Analysis(std::vector<int>& genome, int& Bound_Limit) {
         int found_Internal_Index=std::find(tile_iter+face+1,tile_iter+4,conjugate_Face)-tile_iter;
         while(found_Internal_Index!=4) {
           if(found_Internal_Index==face+2) //infite loop
-            return -11;
+            return -5;
           if((std::count(looping_genome.begin(),looping_genome.end(),*(tile_iter+face))+std::count(looping_genome.begin(),looping_genome.end(),*(tile_iter+found_Internal_Index)))>2) //internal BP
-            return -12;
+            return -6;
           else {
             *(tile_iter+face)=0;
             *(tile_iter+found_Internal_Index)=0;
@@ -168,10 +168,10 @@ int loop_Analysis(std::vector<int>& genome, int& Bound_Limit) {
   }
 
   if((rank4+rank2)>=2) //Can reject as multiple internal H.O. loops
-    return -10;
+    return -7;
 
   if(NUM_TILES==1)
-    return BP_Check(genome) ? -13 : 1;
+    return BP_Check(genome) ? -8 : 1;
 
   bool found_harmful_loop=false;
   
@@ -199,7 +199,7 @@ int loop_Analysis(std::vector<int>& genome, int& Bound_Limit) {
         //Found a rank infinity loop, check if it is really a rank one loop
         if(temp_rankInf>0) {
           if(NUM_TILES<4) //Can reject as found true rank infinity loop
-            return -111;
+            return -9;
           //Must check if rank one loop
           else {
             for(std::vector<int>::iterator it = temp_loop_Histories.begin();it!=temp_loop_Histories.end(); ) {
@@ -210,7 +210,7 @@ int loop_Analysis(std::vector<int>& genome, int& Bound_Limit) {
                   --rankInf;
                   ++rank1;
                   if(!Cut_Rank_One_Loop(genome,partial_History))
-                    return -20;
+                    return -10;
 
                   Cut_Rank_One_Loop(looping_genome,partial_History);
                   SIF_Elimination(looping_genome,false);
@@ -218,7 +218,7 @@ int loop_Analysis(std::vector<int>& genome, int& Bound_Limit) {
 
                 }
                 else
-                  return -111; //Reject as infinite loop
+                  return -9; //Reject as infinite loop
               }
               else
                 if(*it!=-1)
@@ -243,14 +243,14 @@ int loop_Analysis(std::vector<int>& genome, int& Bound_Limit) {
     if((genome.size()-std::count(genome.begin(),genome.end(),0))<=2)
       return 1;
     else
-      return -15;
+      return -11;
   }
   
   
   //std::cout<<"RANKS "<<rank1<<","<<rank2<<","<<rank4<<","<<rankInf<<std::endl;
   if(rank1==0 && (rank2+rank4)<=1) {
     if((rank2+rank4)==0)
-      return -101;
+      return -12;
     if(!loop_Histories.empty()) 
       Bound_Limit+= (*loop_Histories.begin()-1)*(loop_Histories.size()-2)/4;
     return 1;

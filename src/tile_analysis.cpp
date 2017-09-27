@@ -42,25 +42,25 @@ int Graph_Analysis(std::vector<int> genotype) {
       return 1;
   
   if(Double_BP_Check(genotype))
-    return -1;
+    return -2;
   
   int SIF_result=SIF_Elimination(genotype);
   if(SIF_result!=0)
     return SIF_result;  
 
   if(BP_Disjointed_Check(genotype))
-    return -1;
+    return -4;
   
   int Bound_Limit=0;
   int loop_result=loop_Analysis(genotype,Bound_Limit);
 
   if(loop_result<0)
-    return -1;
+    return loop_result;
   if(loop_result>0 && !BP_Check(genotype))
     return 1;  
 
   Bound_Limit+=Bound_Limit >0 ? genotype.size()/4 : genotype.size()/2;
-  return Bounded_Loop_Growth_Check(genotype,Bound_Limit) ? 1 : -1;  
+  return Bounded_Loop_Growth_Check(genotype,Bound_Limit) ? 1 : -13;  
 }
 
 
