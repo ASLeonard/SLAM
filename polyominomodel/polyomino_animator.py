@@ -80,10 +80,13 @@ def PolyominoBuilder(genotype):
             yield placement,copy(POSSIBLE_GRID)
         
 ## ANIMATION SECTION ##
+ERROR_CODES={0:'Steric Mismatch',-1:'Disjointed Genotype',-2:'Double Branching Point',-3:'Invalid SIFE',-4:'Disjointed Branching Point',-5:'Infinite Internal Loop',-6:'Internal Branching Point',-7:'Multiple Internal Loops',-8:'Single Tile Branching Point',-9:'External Infinite Loop',-10:'Uncuttable Infinite Loop',-11:'Irreducible Loops',-12:'No Loops',-13:'Unbounded Loop Growth'}
 
 def GrowPoly(genotype,write_it=False,fps_par=1.25):
-    if GraphAssemblyOutcome(genotype)<=0:
-        print 'bad build, should reject...' 
+    assert(len(genotype)%4==0),  "Genotype length is invalid, each tile must have 4 faces"
+    assembly_outcome=GraphAssemblyOutcome(genotype);
+    if assembly_outcome<=0:
+        print '**Bad phenotype**\nRejection due to: {}'.format(ERROR_CODES[assembly_outcome])
     fig = plt.figure(figsize=(10,10))
     plt.axis('off')
     ax = plt.gca()
