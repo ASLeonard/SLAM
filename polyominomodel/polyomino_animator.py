@@ -1,15 +1,13 @@
 #!/usr/bin/env python
 
 import ctypes
-from copy import copy
 import sys
-import site
+import os
+import matplotlib.pyplot as plt
 
 from collections import defaultdict
+from copy import copy
 from random import choice
-from random import uniform
-
-import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 from matplotlib.animation import FuncAnimation,ImageMagickWriter
 
@@ -19,10 +17,11 @@ def cycleList(inputList,numCycles):
     return inputList[-numCycles:] + inputList[:-numCycles]
 
 ## WRAPPER SECTION ##
-package_sites=site.getsitepackages()
+
 Poly_Lib=None
-try:
-    Poly_Lib=ctypes.cdll.LoadLibrary('{}/poly_wrapped_library.so'.format(package_sites[0]))
+abspath=os.path.abspath(os.path.dirname(__file__))
+Poly_Lib=ctypes.cdll.LoadLibrary('{}/CLAM.so'.format(abspath))
+
 Poly_Lib.Graph_Assembly_Outcome.restype=ctypes.c_int
 Poly_Lib.Graph_Assembly_Outcome.argtype=[ctypes.c_int,ctypes.POINTER(ctypes.c_int)]
 
@@ -40,7 +39,7 @@ def InteractionMatrix(input_face):
     return  (1-input_face%2)*(input_face-1)+(input_face%2)*(input_face+1) if input_face>0 else input_face
 
 def PolyominoBuilder(genotype):
-    SIZE_LIMIT=(len(genotype)/2)**2
+    SIZE_LIMIT=2*(len(genotype)/2)**2
     POLYOMINO_GRID=defaultdict(tuple)
     POSSIBLE_GRID=defaultdict(list)
     IMPOSSIBLE_GRID=set()
