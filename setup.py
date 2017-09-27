@@ -15,8 +15,9 @@ setup(
     packages            = ['polyominomodel'],
     author_email        = 'asl47@cam.ac.uk',
     description         = 'Various polyomino fun parts',
-    long_description    = open('README.txt').read(),
+    long_description    = open('README.md').read(),
     license             = 'LICENSE.txt',
+    install_requires    = ["matplotlib"]
     ext_modules         = [Extension("polyominomodel.CLAM",sources=['src/tile_methods.cpp','src/tile_analysis.cpp','src/polyomino_wrapper.cpp'],include_dirs = ['src/includes'],extra_compile_args=extra_compile_arguments,extra_link_args=extra_link_arguments,language='c++11')],
     headers             = ['src/includes/tile_analysis.hpp','src/includes/tile_methods.hpp','src/includes/xorshift.hpp']
     )
