@@ -6,7 +6,7 @@ from distutils.extension import Extension
 # Common flags for both release and debug builds.
 #extra_compile_arguments = sysconfig.get_config_var('CFLAGS').split()
 extra_compile_arguments = ["-std=c++11", "-O3","-Wall", "-Wextra","-xc++"]
-extra_link_arguments    = ["-Wl,--no-undefined","-lstdc++","-shared-libgcc","-Wl,-rpath,$(pwd)"]
+extra_link_arguments    = ["-Wl,--no-undefined","-lstdc++","-shared-libgcc"]
 
 setup(
     name                = 'PolyominoModel',
@@ -17,7 +17,9 @@ setup(
     description         = 'Various polyomino fun parts',
     long_description    = open('README.md').read(),
     license             = 'LICENSE.txt',
-    install_requires    = ["matplotlib"]
+    platforms           = ["Linux"],
+    install_requires    = ["matplotlib"],
+    url                 = "https://github.com/IcyHawaiian/SLAM",
     ext_modules         = [Extension("polyominomodel.CLAM",sources=['src/tile_methods.cpp','src/tile_analysis.cpp','src/polyomino_wrapper.cpp'],include_dirs = ['src/includes'],extra_compile_args=extra_compile_arguments,extra_link_args=extra_link_arguments,language='c++11')],
     headers             = ['src/includes/tile_analysis.hpp','src/includes/tile_methods.hpp','src/includes/xorshift.hpp']
     )
