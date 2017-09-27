@@ -1,4 +1,4 @@
-# **S**quare **L**attice Tile **A**ssembly **M*odel 
+# **S**quare **L**attice Tile **A**ssembly **M**odel 
 
 
 
