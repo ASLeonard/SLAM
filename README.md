@@ -37,5 +37,8 @@ Some nice examples to try
 ### Advanced bits
 
 Can also pass additional arguments to GrowPoly
-    - write_it = False/True -> writes the animated gif to the local directory
-    - fps_par  = float      -> the number of steps per second in the written gif
+
+    - write_it = False/True 
+      > writes the animated gif to the local directory
+    - fps_par  = float
+      > the number of steps per second in the written gif
