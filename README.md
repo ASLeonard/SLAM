@@ -1,4 +1,4 @@
-# *S*quare *L*attice Tile *A*ssembly *M*odel 
+# *S*quare *L*attice Tile *A*ssembly *M*odel (SLAM)
 
 Note this is currently dependent on
 
@@ -40,3 +40,9 @@ Can also pass additional arguments to GrowPoly
 
 * write_it = False/True -> writes the animated gif to the local directory
 * fps_par  = float -> the number of steps per second in the written gif
+
+## Misc
+
+Homepage!
+
+https://www.tcm.phy.cam.ac.uk/profiles/asl47/
