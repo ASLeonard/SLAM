@@ -5,5 +5,5 @@ extern "C" int Graph_Assembly_Outcome(int size, int *genome) {
   for(int n=0;n<size; ++n) {
     genotype[n]=genome[n];
   }
-  return Get_Phenotype_Fitness(genotype,false);
+  return Get_Phenotype_Fitness(genotype,-1,false);
 }

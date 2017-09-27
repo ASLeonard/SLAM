@@ -19,8 +19,11 @@ def cycleList(inputList,numCycles):
 ## WRAPPER SECTION ##
 
 Poly_Lib=None
-abspath=os.path.abspath(os.path.dirname(__file__))
-Poly_Lib=ctypes.cdll.LoadLibrary('{}/CLAM.so'.format(abspath))
+try:
+    abspath=os.path.abspath(os.path.dirname(__file__))
+    Poly_Lib=ctypes.cdll.LoadLibrary('{}/CLAM.so'.format(abspath))
+except:
+    Poly_Lib=ctypes.cdll.LoadLibrary('/u/fs1/asl47/Documents/PolyominoModel/build/lib.linux-x86_64-2.7/polyominomodel/CLAM.so')
 
 Poly_Lib.Graph_Assembly_Outcome.restype=ctypes.c_int
 Poly_Lib.Graph_Assembly_Outcome.argtype=[ctypes.c_int,ctypes.POINTER(ctypes.c_int)]
@@ -81,7 +84,7 @@ def PolyominoBuilder(genotype):
         
 ## ANIMATION SECTION ##
 
-def GrowPoly(genotype,write_it=False):
+def GrowPoly(genotype,write_it=False,fps_par=1.25):
     if GraphAssemblyOutcome(genotype)<=0:
         print 'bad build, should reject...' 
     fig = plt.figure(figsize=(10,10))
@@ -93,6 +96,7 @@ def GrowPoly(genotype,write_it=False):
 
     def init():
         pass
+    
     def AnimateBuild(i,data,ft,tt):
         ## FIRST FRAME ##
         if i==0:
@@ -117,6 +121,8 @@ def GrowPoly(genotype,write_it=False):
         if i==len(data)*2+1:
             ft[-1].set_visible(False)
             return ft+tt
+        if i>len(data)*2+1:
+            return 
         ## !!FURTHER FRAMES!! ##
         if i%2==0:
             for del_it in ft[1::2]:
@@ -141,10 +147,10 @@ def GrowPoly(genotype,write_it=False):
     temporary_tiles=[]
     poly_generator=list(PolyominoBuilder(genotype))
     plt.axis([min([i[0][0][0] for i in poly_generator])-0.25,max([i[0][0][0] for i in poly_generator])+1.25,min([i[0][0][1] for i in poly_generator])-0.25,max([i[0][0][1] for i in poly_generator])+1.25])
-    anim = FuncAnimation(fig, AnimateBuild,init_func=init,frames=len(poly_generator)*2+2, interval=800, blit=False,fargs=(poly_generator,fixed_tiles,temporary_tiles),repeat=False)
+    anim = FuncAnimation(fig, AnimateBuild,init_func=init,frames=len(poly_generator)*2+5, interval=800, blit=False,fargs=(poly_generator,fixed_tiles,temporary_tiles),repeat=False)
     plt.tight_layout()
     if write_it:
-        writer = ImageMagickWriter(fps=1.25)
+        writer = ImageMagickWriter(fps=fps_par)
         anim.save('PolyominoAnimation.gif', writer=writer)
     else:
         plt.show(block=False)
