@@ -6,7 +6,7 @@ from distutils.extension import Extension
 # Common flags for both release and debug builds.
 #extra_compile_arguments = sysconfig.get_config_var('CFLAGS').split()
 extra_compile_arguments = ["-std=c++11", "-O3","-Wall", "-Wextra","-xc++"]
-extra_link_arguments    = ["-Wl,--no-undefined","-lstdc++","-shared-libgcc","-Wl,-rpath,'$ORIGIN"]
+extra_link_arguments    = ["-Wl,--no-undefined","-lstdc++","-shared-libgcc","-Wl,-rpath,$(pwd)"]
 
 setup(
     name                = 'PolyominoModel',

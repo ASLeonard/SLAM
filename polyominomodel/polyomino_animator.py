@@ -23,7 +23,8 @@ try:
     abspath=os.path.abspath(os.path.dirname(__file__))
     Poly_Lib=ctypes.cdll.LoadLibrary('{}/CLAM.so'.format(abspath))
 except:
-    Poly_Lib=ctypes.cdll.LoadLibrary('/u/fs1/asl47/Documents/PolyominoModel/build/lib.linux-x86_64-2.7/polyominomodel/CLAM.so')
+    print "REVERTING TO LOCAL MODE"
+    #Poly_Lib=ctypes.cdll.LoadLibrary('/u/fs1/asl47/Documents/PolyominoModel/build/lib.linux-x86_64-2.7/polyominomodel/CLAM.so')
 
 Poly_Lib.Graph_Assembly_Outcome.restype=ctypes.c_int
 Poly_Lib.Graph_Assembly_Outcome.argtype=[ctypes.c_int,ctypes.POINTER(ctypes.c_int)]
