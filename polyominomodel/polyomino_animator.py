@@ -17,13 +17,14 @@ def cycleList(inputList,numCycles):
     return inputList[-numCycles:] + inputList[:-numCycles]
 
 ## WRAPPER SECTION ##
-
-abspath=os.path.abspath(os.path.dirname(__file__))
-Poly_Lib=ctypes.cdll.LoadLibrary('{}/CLAM.so'.format(abspath))
-
-
-Poly_Lib.Graph_Assembly_Outcome.restype=ctypes.c_int
-Poly_Lib.Graph_Assembly_Outcome.argtype=[ctypes.c_int,ctypes.POINTER(ctypes.c_int)]
+Poly_Lib='init'
+try:
+    abspath=os.path.abspath(os.path.dirname(__file__))
+    Poly_Lib=ctypes.cdll.LoadLibrary('{}/CLAM.so'.format(abspath))
+    Poly_Lib.Graph_Assembly_Outcome.restype=ctypes.c_int
+    Poly_Lib.Graph_Assembly_Outcome.argtype=[ctypes.c_int,ctypes.POINTER(ctypes.c_int)]
+except:
+    Poly_Lib='Failed'
 
 def GraphAssemblyOutcome(genotype):
     genotype_Pointer=(ctypes.c_int*len(genotype))(*genotype)
@@ -84,88 +85,73 @@ ERROR_CODES={0:'Steric Mismatch',-1:'Disjointed Genotype',-2:'Double Branching P
 
 def GrowPoly(genotype,write_it=False,fps_par=1.25):
     assert(len(genotype)%4==0),  "Genotype length is invalid, each tile must have 4 faces"
-    assembly_outcome=GraphAssemblyOutcome(genotype);
-    if assembly_outcome<=0:
-        print '**Bad phenotype**\nRejection due to: {}'.format(ERROR_CODES[assembly_outcome])
+    if Poly_Lib!='Failed':
+        assembly_outcome=GraphAssemblyOutcome(genotype);
+        if assembly_outcome<=0:
+            print '**Bad phenotype**\nRejection due to: {}'.format(ERROR_CODES[assembly_outcome])
+    else:
+        print "No outcome information available"    
     fig = plt.figure(figsize=(10,10))
     plt.axis('off')
     ax = plt.gca()
     ax.set_aspect(1)
-    COLORS=['royalblue','darkgreen','firebrick','chocolate','orchid','goldenrod']
+    COLORS=['royalblue','darkgreen','firebrick','chocolate','orchid','goldenrod','navy','olive','lime','teal','cornsilk']
     HATCHES=['//','\\','+','O', '.']
 
     def init():
         pass
-    
-    def AnimateBuild(i,data,ft,tt):
+
+    temporary_tiles=[]
+    data=list(PolyominoBuilder(genotype))
+    def AnimateBuild(i):
         ## FIRST FRAME ##
         if i==0:
-            ft.append(Rectangle((0,0),0.95,0.95,fill=True,alpha=1,facecolor=COLORS[0],edgecolor='k',lw=2,hatch='*'))
-            ax.add_patch(ft[-1])
-            ft.append(Rectangle((0,0),0.95,0.95,fill=False,alpha=1,edgecolor='r',lw=2))
-            ax.add_patch(ft[-1])
-            return ft+tt
+            ax.add_patch(Rectangle((0,0),0.95,0.95,fill=True,alpha=1,facecolor=COLORS[0],edgecolor='k',lw=2,hatch='*'))
+            temporary_tiles.append(Rectangle((0,0),0.95,0.95,fill=False,alpha=1,edgecolor='r',lw=2))
+            ax.add_patch(temporary_tiles[0])
+
         ## SECOND FRAME ##
-        if i==1:
-            ft[1].set_visible(False)
-            return ft+tt
+        elif i==1:
+            temporary_tiles.pop().remove()
+            return
+        
         ## THIRD FRAME ##
-        if i==2:
+        elif i==2:
             for key in data[0][1]:
                 potential_tiles=[t_type[0] for t_type in data[0][1][key]]
                 for j,pt in enumerate(set(potential_tiles)):
-                    tt.append(Rectangle(key,0.95,0.95,fill=True,alpha=0.25,facecolor=COLORS[pt],edgecolor='k',lw=2,hatch=HATCHES[j%5]))
-                    ax.add_patch(tt[-1])
-            return ft+tt
-        ## LAST FRAME ##
-        if i==len(data)*2+1:
-            ft[-1].set_visible(False)
-            return ft+tt
-        if i>len(data)*2+1:
-            return 
+                    temporary_tiles.append(Rectangle(key,0.95,0.95,fill=True,alpha=0.25,facecolor=COLORS[pt],edgecolor='k',lw=2,hatch=HATCHES[j%5]))
+                    ax.add_patch(temporary_tiles[-1])
+
+        ## LAST FRAMES ##
+        elif i>len(data)*2:
+            return
+        
         ## !!FURTHER FRAMES!! ##
-        if i%2==0:
-            for del_it in ft[1::2]:
-                del_it.set_visible(False)
-            for del_it in tt:
-                del_it.set_visible(False)
+        elif i%2:
+            current_tile=data[i/2][0]
+            ax.add_patch(Rectangle(current_tile[0],0.95,0.95,fill=True,alpha=1,facecolor=COLORS[current_tile[1][0]],edgecolor='k',lw=2))
+            temporary_tiles.append(Rectangle(current_tile[0],0.95,0.95,fill=False,alpha=1,edgecolor='r',lw=2))
+            ax.add_patch(temporary_tiles[-1])
+            
+        elif i%2==0:
+            while temporary_tiles:
+                temporary_tiles.pop().remove()
             for key in data[i/2-1][1]:
                 potential_tiles=[t_type[0] for t_type in data[i/2-1][1][key]]
                 for j,pt in enumerate(set(potential_tiles)):
-                    tt.append(Rectangle(key,0.95,0.95,fill=True,alpha=0.25,facecolor=COLORS[pt],edgecolor='k',lw=2,hatch=HATCHES[j%5]))
-                    ax.add_patch(tt[-1])
-            return ft+tt
-        if i%2==1:
-            current_tile=data[i/2][0]
-            ft.append(Rectangle(current_tile[0],0.95,0.95,fill=True,alpha=1,facecolor=COLORS[current_tile[1][0]],edgecolor='k',lw=2))
-            ax.add_patch(ft[-1])
-            ft.append(Rectangle(current_tile[0],0.95,0.95,fill=False,alpha=1,edgecolor='r',lw=2))
-            ax.add_patch(ft[-1])
-            return ft+tt
+                    temporary_tiles.append(Rectangle(key,0.95,0.95,fill=True,alpha=0.25,facecolor=COLORS[pt],edgecolor='k',lw=2,hatch=HATCHES[j%5]))
+                    ax.add_patch(temporary_tiles[-1])   
 
-    fixed_tiles=[]
-    temporary_tiles=[]
-    poly_generator=list(PolyominoBuilder(genotype))
-    plt.axis([min([i[0][0][0] for i in poly_generator])-0.25,max([i[0][0][0] for i in poly_generator])+1.25,min([i[0][0][1] for i in poly_generator])-0.25,max([i[0][0][1] for i in poly_generator])+1.25])
-    anim = FuncAnimation(fig, AnimateBuild,init_func=init,frames=len(poly_generator)*2+5, interval=800, blit=False,fargs=(poly_generator,fixed_tiles,temporary_tiles),repeat=False)
+    plt.axis([min([i[0][0][0] for i in data])-0.25,max([i[0][0][0] for i in data])+1.25,min([i[0][0][1] for i in data])-0.25,max([i[0][0][1] for i in data])+1.25])
+    
+    anim = FuncAnimation(fig, AnimateBuild,init_func=init,frames=len(data)*2+5, interval=200, blit=False,repeat=False)
     plt.tight_layout()
+    
     if write_it:
         writer = ImageMagickWriter(fps=fps_par)
         anim.save('PolyominoAnimation.gif', writer=writer)
     else:
         plt.show(block=False)
         
-## MAIN SECTION ##
 
-def main():
-    if len(sys.argv)==1 or sys.argv[1]=='-H' or sys.argv[1]=='-h':
-        print "**Polyomino Animator**\nParameter is the genotype as a space separated sequence\nExample: 'python polyomino_animator.pyc 1 2 3 3 4 0 0 0'\nResulting output is saved as a gif in the local directory"
-    else:
-        genotype=[int(i) for i in sys.argv[1:]]
-        print "genotype is: ",genotype
-        assert(len(genotype)%4==0),  "Poorly formed genotype, see example by running 'python polyomino_animator.pyc -h'"
-        GrowPoly(genotype,1)
-        print "finished!"
-
-if __name__ == "__main__":
-    main()
