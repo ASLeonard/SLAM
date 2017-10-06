@@ -1,18 +1,19 @@
 # *S*quare *L*attice Tile *A*ssembly *M*odel (SLAM)
 
-Note this is currently dependent on
+Note this is dependent on
+> matplotlib
 
 
 ## Install
 
-Not 100% sure yet, but download the release, extract, and then install
+This should work
 ```bash
 cd /path/to/download
-tar xvzf SLAM-0.2.0.tar.gz
+tar xvzf SLAM-0.2.0.tar.gz (or otherwise extract it)
 cd /SLAM-0.2.0
 python setup.py install --user 
 ```
-ignore the compile warnings for now
+ignore the compiler warnings
 
 ---
 
@@ -40,8 +41,10 @@ Some nice examples to try
 
 Can also pass additional arguments to GrowPoly
 
-* write_it = False/True -> writes the animated gif to the local directory
-* fps_par  = float -> the number of steps per second in the written gif
+* tile_labels = False/True -> labels the tile edges
+* write_it = String-> writes the animated gif of this name to the local directory
+* fps_par  = float -> the number of frames per second in the written gif
+
 
 ---
 
