@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 
 import ctypes
-import sys
 import os
 import matplotlib.pyplot as plt
 
 from collections import defaultdict
 from copy import copy
-from random import choice
+from random import choice,randint
 from matplotlib.patches import Rectangle
 from matplotlib.animation import FuncAnimation,ImageMagickWriter
 
@@ -16,7 +15,13 @@ from matplotlib.animation import FuncAnimation,ImageMagickWriter
 def cycleList(inputList,numCycles):
     return inputList[-numCycles:] + inputList[:-numCycles]
 
+def GenerateGenotype(genome_length,colours=-1):
+    if colours==-1:
+        colours=genome_length*4+1
+    return [randint(0,colours) for i in xrange(genome_length*4)]
+    
 ## WRAPPER SECTION ##
+
 Poly_Lib='init'
 try:
     abspath=os.path.abspath(os.path.dirname(__file__))
@@ -29,10 +34,6 @@ except:
 def GraphAssemblyOutcome(genotype):
     genotype_Pointer=(ctypes.c_int*len(genotype))(*genotype)
     return Poly_Lib.Graph_Assembly_Outcome(len(genotype),genotype_Pointer)
-
-def TimeIt(tops):
-    for top in tops:
-        Graph_Assembly_Outcome(top)
 
 ## POLYOMINO BUILDER ##
 
