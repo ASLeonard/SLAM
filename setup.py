@@ -1,5 +1,6 @@
 from distutils.core import setup
 from distutils.extension import Extension
+import os
 #import os
 #import sysconfig
 
@@ -8,9 +9,12 @@ from distutils.extension import Extension
 extra_compile_arguments = ["-std=c++11", "-O3","-Wall", "-Wextra","-xc++"]
 extra_link_arguments    = ["-Wl,--no-undefined","-lstdc++","-shared-libgcc"]
 
+here = os.path.abspath(os.path.dirname(__file__))
+exec(open(os.path.join(here, 'polyominomodel/version.py')).read())
+
 setup(
     name                = 'PolyominoModel',
-    version             = '0.2.0',
+    version             = __version__,
     author              = 'AS Leonard',
     packages            = ['polyominomodel'],
     author_email        = 'asl47@cam.ac.uk',
@@ -18,7 +22,6 @@ setup(
     long_description    = open('README.md').read(),
     license             = 'LICENSE.txt',
     platforms           = ["Linux"],
-    install_requires    = ["matplotlib"],
     url                 = "https://github.com/IcyHawaiian/SLAM",
     ext_modules         = [Extension("polyominomodel.CLAM",sources=['src/tile_methods.cpp','src/tile_analysis.cpp','src/polyomino_wrapper.cpp'],include_dirs = ['src/includes'],extra_compile_args=extra_compile_arguments,extra_link_args=extra_link_arguments,language='c++11')],
     headers             = ['src/includes/tile_analysis.hpp','src/includes/tile_methods.hpp','src/includes/xorshift.hpp']

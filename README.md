@@ -14,6 +14,8 @@ python setup.py install --user
 ```
 ignore the compile warnings for now
 
+---
+
 ## Usage
 
 No promises, but should be able to use like 
@@ -40,6 +42,8 @@ Can also pass additional arguments to GrowPoly
 
 * write_it = False/True -> writes the animated gif to the local directory
 * fps_par  = float -> the number of steps per second in the written gif
+
+---
 
 ## Misc
 
