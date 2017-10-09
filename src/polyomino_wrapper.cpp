@@ -1,4 +1,4 @@
-#include "tile_analysis.hpp"
+#include "graph_analysis.hpp"
 
 extern "C" int Graph_Assembly_Outcome(int size, int *genome) {
   //LOAD GENOTYPE

@@ -36,14 +36,16 @@
 ehthumbs.db
 Thumbs.db
 
-
+tests/__pycache/
 build/
 dist/
 docs/_build/
 pip.egg-info/
 MANIFEST
+.cache
 .tox
 *.egg
+*.egg-info
 *.py[cod]
 *~
 .coverage

@@ -1,6 +1,7 @@
 #include "xorshift.hpp"
 
 #include <utility>
+#include <tuple>
 #include <algorithm>
 #include <string>
 #include <vector>
@@ -8,6 +9,7 @@
 #include <map>
 #include <iostream>
 #include <set>
+#include <numeric> 
 
 ////////////
 //Edge Set//
