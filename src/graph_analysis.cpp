@@ -42,7 +42,7 @@ int Graph_Analysis(std::vector<int> genotype) {
       return 1;
   
   if(Double_BP_Check(genotype))
-    return -2;
+    return -1;
   
   int SIF_result=SIF_Elimination(genotype);
   if(SIF_result!=0)
