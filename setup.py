@@ -10,7 +10,7 @@ import shutil
 # Common flags for both release and debug builds.
 #extra_compile_arguments = sysconfig.get_config_var('CFLAGS').split()
 extra_compile_arguments = ["-std=c++11", "-O3","-Wall", "-Wextra","-xc++","-fopenmp"]
-extra_link_arguments    = ["-Wl,--no-undefined","-lstdc++","-shared-libgcc","-fopenmp"]
+extra_link_arguments    = ["-Wl,-undefined,error","-lstdc++","-shared-libgcc","-fopenmp"]
 
 here = os.path.abspath(os.path.dirname(__file__))
 exec(open(os.path.join(here, 'polyominomodel/version.py')).read())
@@ -44,7 +44,7 @@ setup(
     description         = 'Various polyomino fun parts',
     long_description    = open('README.md').read(),
     license             = 'LICENSE.txt',
-    platforms           = ["Linux"],
+    platforms           = ["posix"],
     url                 = "https://github.com/IcyHawaiian/SLAM",
     ext_modules         = [Extension("polyominomodel.CLAM",sources=['src/graph_methods.cpp','src/graph_analysis.cpp','src/polyomino_wrapper.cpp'],include_dirs = ['src/includes'],extra_compile_args=extra_compile_arguments,extra_link_args=extra_link_arguments,language='c++11')],
     headers             = ['src/includes/graph_analysis.hpp','src/includes/graph_methods.hpp','src/includes/xorshift.hpp']
