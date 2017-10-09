@@ -17,7 +17,7 @@ matrix:
       language: generic
 
 #  Manually install python on osx
-install: |
+install: pip install matplotlib |
   if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
 
       brew update;
