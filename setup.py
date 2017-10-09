@@ -1,8 +1,10 @@
+import sys
+import os
+from setuptools.command.test import test as TestCommand
 from distutils.core import setup
 from distutils.extension import Extension
-import os
-#import os
-#import sysconfig
+
+
 
 # Common flags for both release and debug builds.
 #extra_compile_arguments = sysconfig.get_config_var('CFLAGS').split()
@@ -12,11 +14,29 @@ extra_link_arguments    = ["-Wl,--no-undefined","-lstdc++","-shared-libgcc"]
 here = os.path.abspath(os.path.dirname(__file__))
 exec(open(os.path.join(here, 'polyominomodel/version.py')).read())
 
+
+
+class PyTest(TestCommand):
+    user_options = [('pytest-args=', 'a', "Arguments to pass to pytest")]
+
+    def initialize_options(self):
+        TestCommand.initialize_options(self)
+        self.pytest_args = ''
+
+    def run_tests(self):
+        import shlex
+        #import here, cause outside the eggs aren't loaded
+        import pytest
+        errno = pytest.main(shlex.split(self.pytest_args))
+        sys.exit(errno)
+
 setup(
     name                = 'PolyominoModel',
     version             = __version__,
     author              = 'AS Leonard',
     packages            = ['polyominomodel'],
+    tests_require       = ['pytest'],
+    cmdclass            = {'test': PyTest},
     author_email        = 'asl47@cam.ac.uk',
     description         = 'Various polyomino fun parts',
     long_description    = open('README.md').read(),
