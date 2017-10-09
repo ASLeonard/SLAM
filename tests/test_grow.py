@@ -1,8 +1,20 @@
-print "Loading module"
 import polyominomodel as pm
-print "Growing unlabelled"
-pm.GrowPoly([1,1,1,1,2,0,0,0],0)
-print "Growing labelled"
-pm.GrowPoly([1,1,1,1,2,0,0,0],0)
-#print "Saving gif"
-#pm.GrowPoly([1,1,1,1,2,0,0,0],0,"Test_Save")
+def test_cdll_load():
+    assert(pm.polyomino_animator.Poly_Lib!='Failed'), "Failed to load cdll module"
+    
+def test_grow_unlabelled():
+    success=True
+    try:
+        pm.GrowPoly([1,1,1,1,2,0,0,0],0)
+    except:
+        sucess=False
+    assert(success), "failed model"
+
+def test_grow_labelled():
+    success=True
+    try:
+        pm.GrowPoly([1,1,1,1,2,0,0,0],1)
+    except:
+        sucess=False
+    assert(success), "failed model"
+
