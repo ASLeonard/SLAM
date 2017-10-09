@@ -1,5 +1,4 @@
-#include "tile_methods.hpp"
-#include <set>
+#include "graph_methods.hpp"
 #include <fstream>
 
 
@@ -17,6 +16,7 @@ int Steric_Check_Table(std::vector<int>& genome,std::vector<int>& Known_Shapes,i
 
 bool Traverse_Numbered_Sterics(std::vector<int>& Spatial_Grid,int DELTA_X,int DELTA_Y,int x,int y,int cameFrom);
 
+//int SpiralCoordinate(int x, int y);
 
 /////////////
 //ROTATIONS//

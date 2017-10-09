@@ -8,7 +8,7 @@ from distutils.extension import Extension
 
 # Common flags for both release and debug builds.
 #extra_compile_arguments = sysconfig.get_config_var('CFLAGS').split()
-extra_compile_arguments = ["-std=c++11", "-O3","-Wall", "-Wextra","-xc++"]
+extra_compile_arguments = ["-std=c++11", "-O3","-Wall", "-Wextra","-xc++","-fopenmp"]
 extra_link_arguments    = ["-Wl,--no-undefined","-lstdc++","-shared-libgcc"]
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -43,6 +43,6 @@ setup(
     license             = 'LICENSE.txt',
     platforms           = ["Linux"],
     url                 = "https://github.com/IcyHawaiian/SLAM",
-    ext_modules         = [Extension("polyominomodel.CLAM",sources=['src/tile_methods.cpp','src/tile_analysis.cpp','src/polyomino_wrapper.cpp'],include_dirs = ['src/includes'],extra_compile_args=extra_compile_arguments,extra_link_args=extra_link_arguments,language='c++11')],
-    headers             = ['src/includes/tile_analysis.hpp','src/includes/tile_methods.hpp','src/includes/xorshift.hpp']
+    ext_modules         = [Extension("polyominomodel.CLAM",sources=['src/graph_methods.cpp','src/graph_analysis.cpp','src/polyomino_wrapper.cpp'],include_dirs = ['src/includes'],extra_compile_args=extra_compile_arguments,extra_link_args=extra_link_arguments,language='c++11')],
+    headers             = ['src/includes/graph_analysis.hpp','src/includes/graph_methods.hpp','src/includes/xorshift.hpp']
     )
