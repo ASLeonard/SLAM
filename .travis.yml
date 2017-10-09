@@ -3,8 +3,8 @@ notifications:
 sudo: false
 language: python
 os:
-  -linux
-  -osx
+  - linux
+  - osx
 python:
   - 2.7
 install:
