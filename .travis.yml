@@ -17,19 +17,17 @@ matrix:
       language: generic
 
 #  Manually install python on osx
+before_install: 
+  - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
+    brew update;
+    brew install mono;
+    brew install pyenv;
+    pyenv install $PYTHON;
+    fi
+    
 install: 
-  - pip install matplotlib |
-  if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
-
-      brew update;
-      brew install python;
-      python -m venv venv;
-      source venv/bin/activate;
-      python setup.py install
-
-  else
-      python setup.py install
-  fi
+  - pip install matplotlib 
+  - python setup.py install
 
 before_script: # configure a headless display to test plot generation
   - "export DISPLAY=:99.0"
