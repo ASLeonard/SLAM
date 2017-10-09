@@ -20,6 +20,21 @@ def GenerateGenotype(genome_length,colours=-1):
     if colours==-1:
         colours=genome_length*4+1
     return [randint(0,colours) for i in xrange(genome_length*4)]
+
+def GenerateBDGenotype(genome_length,colours=-1,max_attempts=1000):
+    if colours==-1:
+        colours=genome_length*4+1
+        
+    trial_genotype=[randint(0,colours) for i in xrange(genome_length*4)]
+    attempts=0
+    while GraphAssemblyOutcome(trial_genotype)<=0:
+         trial_genotype=[randint(0,colours) for i in xrange(genome_length*4)]
+         attempts+=1
+         if attempts>max_attempts:
+             return [0,0,0,0] 
+        
+    return trial_genotype
+
     
 ## WRAPPER SECTION ##
 
@@ -33,8 +48,11 @@ except:
     Poly_Lib='Failed'
 
 def GraphAssemblyOutcome(genotype):
-    genotype_Pointer=(ctypes.c_int*len(genotype))(*genotype)
-    return Poly_Lib.Graph_Assembly_Outcome(len(genotype),genotype_Pointer)
+    if Poly_Lib!='Failed':
+        genotype_Pointer=(ctypes.c_int*len(genotype))(*genotype)
+        return Poly_Lib.Graph_Assembly_Outcome(len(genotype),genotype_Pointer)
+    else:
+        return "Unable to load cdll properly"
 
 ## POLYOMINO BUILDER ##
 
