@@ -3,7 +3,6 @@ import os
 from setuptools.command.test import test as TestCommand
 from distutils.core import setup
 from distutils.extension import Extension
-import shutil 
 
 
 
@@ -29,7 +28,6 @@ class PyTest(TestCommand):
         #import here, cause outside the eggs aren't loaded
         import pytest
         errno = pytest.main(shlex.split(self.pytest_args))
-	shutil.rmtree('.cache')
         sys.exit(errno)
 	
 
