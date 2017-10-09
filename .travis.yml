@@ -17,17 +17,18 @@ matrix:
       language: generic
 
 #  Manually install python on osx
-install: pip install matplotlib |
+install: 
+  - pip install matplotlib |
   if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
 
       brew update;
       brew install python;
-      python3 -m venv venv;
+      python -m venv venv;
       source venv/bin/activate;
-      pip install . test
+      python setup.py install
 
   else
-      pip install . test
+      python setup.py install
   fi
 
 before_script: # configure a headless display to test plot generation
