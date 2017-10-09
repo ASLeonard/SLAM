@@ -21,7 +21,7 @@ ignore the compiler warnings
 
 ## Usage
 
-No promises, but should be able to use like 
+Should (in theory) be able to use like 
 
 TestScript.py
 ```python

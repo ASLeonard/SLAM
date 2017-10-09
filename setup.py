@@ -3,14 +3,15 @@ import os
 from setuptools.command.test import test as TestCommand
 from distutils.core import setup
 from distutils.extension import Extension
-import shutil 
 
 
 
 # Common flags for both release and debug builds.
 #extra_compile_arguments = sysconfig.get_config_var('CFLAGS').split()
-extra_compile_arguments = ["-std=c++11", "-O3","-Wall", "-Wextra","-xc++","-fopenmp"]
-extra_link_arguments    = ["-Wl,-undefined,error","-lstdc++","-shared-libgcc","-fopenmp"]
+
+extra_compile_arguments = ["-std=c++11", "-O3","-Wall", "-Wextra","-xc++"]
+extra_link_arguments    = ["-Wl,-undefined,error","-lstdc++","-shared-libgcc"]
+
 
 here = os.path.abspath(os.path.dirname(__file__))
 exec(open(os.path.join(here, 'polyominomodel/version.py')).read())
@@ -29,7 +30,6 @@ class PyTest(TestCommand):
         #import here, cause outside the eggs aren't loaded
         import pytest
         errno = pytest.main(shlex.split(self.pytest_args))
-	shutil.rmtree('.cache')
         sys.exit(errno)
 	
 
