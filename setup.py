@@ -8,8 +8,8 @@ from distutils.extension import Extension
 
 # Common flags for both release and debug builds.
 #extra_compile_arguments = sysconfig.get_config_var('CFLAGS').split()
-extra_compile_arguments = ["-std=c++11", "-O3","-Wall", "-Wextra","-xc++","-fopenmp"]
-extra_link_arguments    = ["-Wl,--no-undefined","-lstdc++","-shared-libgcc","-fopenmp"]
+extra_compile_arguments = ["-std=c++11", "-O3","-Wall", "-Wextra","-xc++"]
+extra_link_arguments    = ["-Wl,--no-undefined","-lstdc++","-shared-libgcc"]
 
 here = os.path.abspath(os.path.dirname(__file__))
 exec(open(os.path.join(here, 'polyominomodel/version.py')).read())
