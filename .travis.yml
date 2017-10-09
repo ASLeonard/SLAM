@@ -23,11 +23,11 @@ before_install:
 install: 
   - pip install matplotlib 
   - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
-    brew install python
-    python2 setup.py install
+    brew install python;
+    python2 setup.py install;
     fi
   - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
-    python setup.py install
+    python setup.py install;
     fi
 
 
