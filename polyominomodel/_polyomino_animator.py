@@ -155,8 +155,8 @@ def GrowPoly(genotype,tile_labels=True,growing=False,build_strategy='random',wri
         SetTightBounds(ax,data)
         
     anim = FuncAnimation(fig, AnimateBuild,init_func=init,frames=len(data)*2+5, interval=200, blit=False,repeat=False)
-    plt.tight_layout()
-    #fig.set_tight_layout(True)
+    #plt.tight_layout()
+    fig.set_tight_layout(True)
     
     if type(write_it)==str:
         writer = ImageMagickWriter(fps=fps_par)
