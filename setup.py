@@ -1,6 +1,7 @@
 import sys
 import os
-from setuptools.command.test import test as TestCommand
+
+from distutils.cmd import Command
 from distutils.core import setup
 from distutils.extension import Extension
 from sys import platform
@@ -23,8 +24,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 exec(open(os.path.join(here, 'polyominomodel/_version.py')).read())
 
 
-
-class PyTest(TestCommand):
+class PyTest(Command):
     user_options = [('pytest-args=', 'a', "Arguments to pass to pytest")]
 
     def initialize_options(self):
@@ -50,8 +50,7 @@ setup(
     description         = 'Various polyomino methods',
     long_description    = open('README.md').read(),
     license             = 'LICENSE.txt',
-    platforms           = ["posix"],
-    zip_safe            = False,
+    platforms           = ["linux","osx"],
     url                 = "https://github.com/IcyHawaiian/SLAM",
     ext_modules         = [Extension("polyominomodel.CLAM",sources=['src/graph_methods.cpp','src/graph_analysis.cpp','src/polyomino_wrapper.cpp'],include_dirs = ['src/includes'],extra_compile_args=extra_compile_arguments,extra_link_args=extra_link_arguments,language='c++11')],
     headers             = ['src/includes/graph_analysis.hpp','src/includes/graph_methods.hpp','src/includes/xorshift.hpp']

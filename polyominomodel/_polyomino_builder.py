@@ -23,6 +23,8 @@ def PolyominoBuilder(genotype,build_strategy='random'):
 
     if build_strategy=='dfs' or build_strategy=='bfs':
         possible_grid_order=[]
+    else:
+        build_strategy='random'
 
     def placeTile(tType,position,orientation):
         POLYOMINO_GRID[position]=(tType,orientation)
@@ -45,7 +47,14 @@ def PolyominoBuilder(genotype,build_strategy='random'):
                 if bindingEdge!=0 and cycleList(tile,cycNum)[oppositeBindingEdgeIndex]==InteractionMatrix(bindingEdge):
                     POSSIBLE_GRID[checkPosition].append((i,cycNum))
                     if build_strategy=='dfs' or build_strategy=='bfs':
-                        possible_grid_order.append(checkPosition)
+                        if checkPosition not in possible_grid_order:
+                            possible_grid_order.append(checkPosition)
+                        else:
+                            if build_strategy=='dfs':
+                                possible_grid_order.remove(checkPosition)
+                                possible_grid_order.append(checkPosition)
+                            else:
+                                pass
 
     placement=placeTile(0,(0,0),0)
     identifyValidNeighbours((0,0))
@@ -53,10 +62,11 @@ def PolyominoBuilder(genotype,build_strategy='random'):
     while len(POSSIBLE_GRID)>0:
         if build_strategy=='random':
             newPolyominoPosition,newPolyominoDetails=choice([(position, tileDetail) for position, tileDetails in POSSIBLE_GRID.iteritems() for tileDetail in tileDetails])
-        if build_strategy=='dfs':
+        elif build_strategy=='dfs':
             newPolyominoPosition,newPolyominoDetails= (possible_grid_order[-1],POSSIBLE_GRID[possible_grid_order.pop()][-1])
-        if build_strategy=='bfs':
+        elif build_strategy=='bfs':
             newPolyominoPosition,newPolyominoDetails= (possible_grid_order[0],POSSIBLE_GRID[possible_grid_order.pop(0)][0])
+
 
         POSSIBLE_GRID.pop(newPolyominoPosition)
         placement= placeTile(newPolyominoDetails[0],newPolyominoPosition,newPolyominoDetails[1])
