@@ -9,12 +9,12 @@ from distutils.extension import Extension
 # Common flags for both release and debug builds.
 #extra_compile_arguments = sysconfig.get_config_var('CFLAGS').split()
 
-extra_compile_arguments = ["-std=c++11", "-O3","-Wall", "-Wextra","-xc++"]
-extra_link_arguments    = ["-Wl,-undefined,error","-lstdc++","-shared-libgcc"]
+extra_compile_arguments = ["-std=c++11", "-O3","-Wall", "-Wextra"]
+extra_link_arguments = ["-Wl,-undefined,error","-lstdc++"]
 
 
 here = os.path.abspath(os.path.dirname(__file__))
-exec(open(os.path.join(here, 'polyominomodel/version.py')).read())
+exec(open(os.path.join(here, 'polyominomodel/_version.py')).read())
 
 
 
@@ -41,10 +41,11 @@ setup(
     tests_require       = ['pytest'],
     cmdclass            = {'test': PyTest},
     author_email        = 'asl47@cam.ac.uk',
-    description         = 'Various polyomino fun parts',
+    description         = 'Various polyomino methods',
     long_description    = open('README.md').read(),
     license             = 'LICENSE.txt',
     platforms           = ["posix"],
+    zip_safe            = False,
     url                 = "https://github.com/IcyHawaiian/SLAM",
     ext_modules         = [Extension("polyominomodel.CLAM",sources=['src/graph_methods.cpp','src/graph_analysis.cpp','src/polyomino_wrapper.cpp'],include_dirs = ['src/includes'],extra_compile_args=extra_compile_arguments,extra_link_args=extra_link_arguments,language='c++11')],
     headers             = ['src/includes/graph_analysis.hpp','src/includes/graph_methods.hpp','src/includes/xorshift.hpp']
