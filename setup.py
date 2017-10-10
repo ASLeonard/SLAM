@@ -17,8 +17,10 @@ if platform.startswith('darwin'):
     from distutils import sysconfig
     vars = sysconfig.get_config_vars()
     vars['LDSHARED'] = vars['LDSHARED'].replace('-bundle', '-dynamiclib')
+    extra_link_arguments.append("-stdlib=libc++")	
+ libc++
 else:
-    extra_link_arguments.append["-lstdc++"]
+    extra_link_arguments.append("-lstdc++")
 
 here = os.path.abspath(os.path.dirname(__file__))
 exec(open(os.path.join(here, 'polyominomodel/_version.py')).read())
