@@ -25,6 +25,7 @@ install:
   - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     brew install python;
     python2 setup.py install;
+    pip install pytest==2.8.7;
     fi
   - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
     python setup.py install;
