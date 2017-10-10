@@ -25,7 +25,6 @@ install:
   - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     brew install python;
     python2 setup.py install;
-    pip install pytest==2.8.7;
     fi
   - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
     python setup.py install;
@@ -43,4 +42,11 @@ before_script: # configure a headless display to test plot generation
     fi
   # give xvfb some time to start
   
-script: python setup.py test
+script: 
+- if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
+    python2 setup.py test;
+    fi
+  - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
+    python setup.py test;
+    fi
+
