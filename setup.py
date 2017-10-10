@@ -18,7 +18,6 @@ if platform.startswith('darwin'):
     vars = sysconfig.get_config_vars()
     vars['LDSHARED'] = vars['LDSHARED'].replace('-bundle', '-dynamiclib')
     extra_link_arguments.append("-stdlib=libc++")	
- libc++
 else:
     extra_link_arguments.append("-lstdc++")
 
