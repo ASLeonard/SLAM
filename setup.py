@@ -3,6 +3,7 @@ import os
 from setuptools.command.test import test as TestCommand
 from distutils.core import setup
 from distutils.extension import Extension
+from sys import platform
 
 
 
@@ -12,6 +13,10 @@ from distutils.extension import Extension
 extra_compile_arguments = ["-std=c++11", "-O3","-Wall", "-Wextra"]
 extra_link_arguments = ["-Wl,-undefined,error","-lstdc++"]
 
+if platform.startswith('darwin'):
+    from distutils import sysconfig
+    vars = sysconfig.get_config_vars()
+    vars['LDSHARED'] = vars['LDSHARED'].replace('-bundle', '-dynamiclib')
 
 here = os.path.abspath(os.path.dirname(__file__))
 exec(open(os.path.join(here, 'polyominomodel/_version.py')).read())
