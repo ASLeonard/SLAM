@@ -16,7 +16,7 @@ extra_link_arguments = ["-Wl,-undefined,error","-lstdc++"]
 if platform.startswith('darwin'):
     from distutils import sysconfig
     vars = sysconfig.get_config_vars()
-    vars['LDSHARED'] = vars['LDSHARED'].replace('-bundle', '-dynamiclib')
+    vars['LDSHARED'] = vars['LDSHARED'].replace('-bundle', '-dynamiclib') #not sure if this is working
 
 
 here = os.path.abspath(os.path.dirname(__file__))

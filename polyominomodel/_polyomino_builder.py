@@ -14,12 +14,15 @@ def InteractionMatrix(input_face):
 
 ## POLYOMINO BUILDER ##
 
-def PolyominoBuilder(genotype):
+def PolyominoBuilder(genotype,build_strategy='random'):
     SIZE_LIMIT=len(genotype)**2
     POLYOMINO_GRID=defaultdict(tuple)
     POSSIBLE_GRID=defaultdict(list)
     IMPOSSIBLE_GRID=set()
     TILE_TYPES=[genotype[i:i+4] for i in xrange(0, len(genotype), 4)]
+
+    if build_strategy=='dfs' or build_strategy=='bfs':
+        possible_grid_order=[]
 
     def placeTile(tType,position,orientation):
         POLYOMINO_GRID[position]=(tType,orientation)
@@ -41,12 +44,20 @@ def PolyominoBuilder(genotype):
             for cycNum in xrange(4):
                 if bindingEdge!=0 and cycleList(tile,cycNum)[oppositeBindingEdgeIndex]==InteractionMatrix(bindingEdge):
                     POSSIBLE_GRID[checkPosition].append((i,cycNum))
+                    if build_strategy=='dfs' or build_strategy=='bfs':
+                        possible_grid_order.append(checkPosition)
 
     placement=placeTile(0,(0,0),0)
     identifyValidNeighbours((0,0))
     yield placement,copy(POSSIBLE_GRID)
     while len(POSSIBLE_GRID)>0:
-        newPolyominoPosition,newPolyominoDetails=choice([(position, tileDetail) for position, tileDetails in POSSIBLE_GRID.iteritems() for tileDetail in tileDetails])
+        if build_strategy=='random':
+            newPolyominoPosition,newPolyominoDetails=choice([(position, tileDetail) for position, tileDetails in POSSIBLE_GRID.iteritems() for tileDetail in tileDetails])
+        if build_strategy=='dfs':
+            newPolyominoPosition,newPolyominoDetails= (possible_grid_order[-1],POSSIBLE_GRID[possible_grid_order.pop()][-1])
+        if build_strategy=='bfs':
+            newPolyominoPosition,newPolyominoDetails= (possible_grid_order[0],POSSIBLE_GRID[possible_grid_order.pop(0)][0])
+
         POSSIBLE_GRID.pop(newPolyominoPosition)
         placement= placeTile(newPolyominoDetails[0],newPolyominoPosition,newPolyominoDetails[1])
         identifyValidNeighbours(newPolyominoPosition)

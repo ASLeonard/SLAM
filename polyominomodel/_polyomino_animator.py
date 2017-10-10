@@ -77,7 +77,7 @@ def SetTightBounds(ax,data):
     plt.axis([min([i[0][0][0] for i in data])-0.25,max([i[0][0][0] for i in data])+1.25,min([i[0][0][1] for i in data])-0.25,max([i[0][0][1] for i in data])+1.25])
     
 
-def GrowPoly(genotype,tile_labels=True,growing=False,write_it=False,fps_par=1.25):
+def GrowPoly(genotype,tile_labels=True,growing=False,build_strategy='random',write_it=False,fps_par=1.25):
     assert(len(genotype)%4==0),  "Genotype length is invalid, each tile must have 4 faces"
     assert(len(genotype)<=40), "Very long genotype, currently not allowed"
 
@@ -101,7 +101,7 @@ def GrowPoly(genotype,tile_labels=True,growing=False,write_it=False,fps_par=1.25
         pass
 
     temporary_tiles=[]
-    data=list(PolyominoBuilder(genotype))
+    data=list(PolyominoBuilder(genotype,build_strategy))
     def AnimateBuild(i):
         if i and growing:
             SetTightBounds(ax,data[:i])
