@@ -11,15 +11,13 @@ from sys import platform
 #extra_compile_arguments = sysconfig.get_config_var('CFLAGS').split()
 
 extra_compile_arguments = ["-std=c++11", "-O3","-Wall", "-Wextra"]
-extra_link_arguments = ["-Wl,-undefined,error"]
+extra_link_arguments = ["-Wl,-undefined,error","-lstdc++"]
 
 if platform.startswith('darwin'):
     from distutils import sysconfig
     vars = sysconfig.get_config_vars()
     vars['LDSHARED'] = vars['LDSHARED'].replace('-bundle', '-dynamiclib')
-    extra_link_arguments.append("-stdlib=libc++")	
-else:
-    extra_link_arguments.append("-lstdc++")
+
 
 here = os.path.abspath(os.path.dirname(__file__))
 exec(open(os.path.join(here, 'polyominomodel/_version.py')).read())

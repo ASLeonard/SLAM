@@ -25,7 +25,10 @@ try:
     if platform.startswith('linux'):
         Poly_Lib=ctypes.cdll.LoadLibrary('{}/CLAM.so'.format(abspath))
     elif platform.startswith('darwin'):
-        Poly_Lib=ctypes.cdll.LoadLibrary('{}/CLAM.dylib'.format(abspath))
+        try:
+            Poly_Lib=ctypes.cdll.LoadLibrary('{}/CLAM.dylib'.format(abspath))
+        except:
+            Poly_Lib=ctypes.cdll.LoadLibrary('{}/CLAM.so'.format(abspath))
     Poly_Lib.Graph_Assembly_Outcome.restype=ctypes.c_int
     Poly_Lib.Graph_Assembly_Outcome.argtype=[ctypes.c_int,ctypes.POINTER(ctypes.c_int)]
 except:

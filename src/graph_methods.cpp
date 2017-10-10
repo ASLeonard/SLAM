@@ -329,7 +329,7 @@ void Trim_Zero_Tiles(std::vector<int>& genome) {
 }
 
 
-bool Check_If_Loop(int tile,int face, std::vector<int>& loop_Path) {
+bool Check_If_Loop(int tile, std::vector<int>& loop_Path) {
   for(auto it = loop_Path.begin();it!=loop_Path.end();it+=2) {
     if(*it==tile)
       return true;        
