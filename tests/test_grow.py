@@ -1,7 +1,4 @@
 import polyominomodel as pm
-
-def test_cdll_load():
-    assert(pm.polyomino_animator.Poly_Lib!='Failed'), "Failed to load cdll module"
     
 def test_grow_unlabelled():
     success=True

@@ -4,34 +4,17 @@ import ctypes
 import os
 import matplotlib.pyplot as plt
 
-from collections import defaultdict
-from copy import copy
-from random import choice,randint
+
+
+from random import randint
 from matplotlib.patches import Rectangle
 from matplotlib.animation import FuncAnimation,ImageMagickWriter
 from sys import platform
 
-## UTILS ##
+from _polyomino_builder import PolyominoBuilder
 
-def cycleList(inputList,numCycles):
-    return inputList[-numCycles:] + inputList[:-numCycles]
 
-def GenerateGenotype(genome_length,colours=-1):
-    if colours==-1:
-        colours=genome_length*4+1
-    return [randint(0,colours) for i in xrange(genome_length*4)]
 
-def GenerateBDGenotype(genome_length,colours=-1,max_attempts=1000):
-    if colours==-1:
-        colours=genome_length*4+1
-    trial_genotype=[randint(0,colours) for i in xrange(genome_length*4)]
-    attempts=0
-    while GraphAssemblyOutcome(trial_genotype)<=0:
-         trial_genotype=[randint(0,colours) for i in xrange(genome_length*4)]
-         attempts+=1
-         if attempts>max_attempts:
-             return [0,0,0,0]
-    return trial_genotype
 
     
 ## WRAPPER SECTION ##
@@ -55,51 +38,30 @@ def GraphAssemblyOutcome(genotype):
     else:
         return "Unable to load cdll properly"
 
-## POLYOMINO BUILDER ##
 
-def InteractionMatrix(input_face):
-    return  (1-input_face%2)*(input_face-1)+(input_face%2)*(input_face+1) if input_face>0 else input_face
+def get_lib():
+    return Poly_Lib
 
-def PolyominoBuilder(genotype):
-    SIZE_LIMIT=len(genotype)**2
-    POLYOMINO_GRID=defaultdict(tuple)
-    POSSIBLE_GRID=defaultdict(list)
-    IMPOSSIBLE_GRID=set()
-    TILE_TYPES=[genotype[i:i+4] for i in xrange(0, len(genotype), 4)]
+## GENETYPE HELPERS ##
 
-    def placeTile(tType,position,orientation):
-        POLYOMINO_GRID[position]=(tType,orientation)
-        return position,(tType,orientation)
+def GenerateGenotype(genome_length,colours=-1):
+    if colours==-1:
+        colours=genome_length*4+1
+    return [randint(0,colours) for i in xrange(genome_length*4)]
 
-    def identifyValidNeighbours(position):
-        centerType,centerOrientation=POLYOMINO_GRID[position]
-        identifyValidNeighbour(position,centerType,centerOrientation,(position[0],position[1]+1),0)#Check Top
-        identifyValidNeighbour(position,centerType,centerOrientation,(position[0]+1,position[1]),1)#Check Right
-        identifyValidNeighbour(position,centerType,centerOrientation,(position[0],position[1]-1),2)#Check Bottom
-        identifyValidNeighbour(position,centerType,centerOrientation,(position[0]-1,position[1]),3)#Check Left
-                
-    def identifyValidNeighbour(position,centerType,centerOrientation,checkPosition,increment):
-        if checkPosition in POLYOMINO_GRID:
-            return False
-        bindingEdge=cycleList(TILE_TYPES[centerType],centerOrientation)[increment]
-        oppositeBindingEdgeIndex=(increment+2)%4
-        for i,tile in enumerate(TILE_TYPES):
-            for cycNum in xrange(4):
-                if bindingEdge!=0 and cycleList(tile,cycNum)[oppositeBindingEdgeIndex]==InteractionMatrix(bindingEdge):
-                    POSSIBLE_GRID[checkPosition].append((i,cycNum))
+def GenerateBDGenotype(genome_length,colours=-1,max_attempts=1000):
+    if colours==-1:
+        colours=genome_length*4+1
+    trial_genotype=[randint(0,colours) for i in xrange(genome_length*4)]
+    attempts=0
+    while GraphAssemblyOutcome(trial_genotype)<=0:
+         trial_genotype=[randint(0,colours) for i in xrange(genome_length*4)]
+         attempts+=1
+         if attempts>max_attempts:
+             return [0,0,0,0]
+    return trial_genotype
 
-    placement=placeTile(0,(0,0),0)
-    identifyValidNeighbours((0,0))
-    yield placement,copy(POSSIBLE_GRID)
-    while len(POSSIBLE_GRID)>0:
-        newPolyominoPosition,newPolyominoDetails=choice([(position, tileDetail) for position, tileDetails in POSSIBLE_GRID.iteritems() for tileDetail in tileDetails])
-        POSSIBLE_GRID.pop(newPolyominoPosition)
-        placement= placeTile(newPolyominoDetails[0],newPolyominoPosition,newPolyominoDetails[1])
-        identifyValidNeighbours(newPolyominoPosition)
-        if len(POLYOMINO_GRID)>SIZE_LIMIT:
-            return
-        else:
-            yield placement,copy(POSSIBLE_GRID)
+
         
 ## ANIMATION SECTION ##
 ERROR_CODES={0:'Steric Mismatch',-1:'Disjointed Genotype',-2:'Double Branching Point',-3:'Invalid SIFE',-4:'Disjointed Branching Point',-5:'Infinite Internal Loop',-6:'Internal Branching Point',-7:'Multiple Internal Loops',-8:'Single Tile Branching Point',-9:'External Infinite Loop',-10:'Uncuttable Infinite Loop',-11:'Irreducible Loops',-12:'No Loops',-13:'Unbounded Loop Growth'}
@@ -198,7 +160,7 @@ def GrowPoly(genotype,tile_labels=True,growing=False,write_it=False,fps_par=1.25
         print "Writing {}.gif to current directory\nfps set as {}".format(write_it,fps_par)
         anim.save('{}.gif'.format(write_it), writer=writer)
     else:
-        pass
-        #plt.show(block=False)
+        #pass
+        plt.show(block=False)
         
 

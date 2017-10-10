@@ -1,5 +1,5 @@
-from polyomino_animator import GrowPoly,GenerateGenotype,GraphAssemblyOutcome,GenerateBDGenotype
+from _polyomino_animator import GrowPoly,GenerateGenotype,GraphAssemblyOutcome,GenerateBDGenotype
 
 __all__ = ['GrowPoly', 'GenerateGenotype','GraphAssemblyOutcome','GenerateBDGenotype']
 
-from version import __version__
+from _version import __version__

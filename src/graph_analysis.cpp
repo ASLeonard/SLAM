@@ -229,14 +229,11 @@ double Steric_Check(std::vector<int>& genome,int Shape_Based_Fitness) {
       //occupied_spiral[SpiralCoordinate(currentX+X_OFFSET,currentY+Y_OFFSET)]=1;
       processingQueue.insert(processingQueue.end(),{currentX+X_OFFSET,currentY+Y_OFFSET,tileN,tileO,f});
       if(tilesInformation.size()>1.25*genome.size()*genome.size()) {
-#pragma omp critical(ster)
-        {
           std::cout<<"HARD EXIT, STERIC OVERFLOW from"<<std::endl;
           for(auto& g: genome) {
             std::cout<<g<<" ";
           }
           std::cout<<std::endl;
-        }
         return -1;        
       }
     }    
@@ -356,14 +353,13 @@ std::vector<int> Steric_Check_Occupation(std::vector<int>& genome) {
       tilesInformation.insert(tilesInformation.end(),{currentX+X_OFFSET,currentY+Y_OFFSET,tileN,tileO,f});
       processingQueue.insert(processingQueue.end(),{currentX+X_OFFSET,currentY+Y_OFFSET,tileN,tileO,f});
       if(tilesInformation.size()>1.25*genome.size()*genome.size()) {
-#pragma omp critical(ster)
-        {
+
           std::cout<<"HARD EXIT, STERIC OVERFLOW from"<<std::endl;
           for(auto& g: genome) {
             std::cout<<g<<" ";
           }
           std::cout<<std::endl;
-        }
+
         return {-1};        
       }
     }    
