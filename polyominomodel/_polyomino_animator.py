@@ -106,8 +106,7 @@ def GrowPoly(genotype,tile_labels=True,growing=False,build_strategy='random',fps
 
     temporary_tiles=[]
     data=list(PolyominoBuilder(genotype,build_strategy))
-    for x in data:
-        print x
+
     def AnimateBuild(i):
         if i and growing:
             SetTightBounds(ax,data[:i])
