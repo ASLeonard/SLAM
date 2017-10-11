@@ -4,17 +4,11 @@ import ctypes
 import os
 import matplotlib.pyplot as plt
 
-
-
 from random import randint
 from matplotlib.patches import Rectangle
 from matplotlib.animation import FuncAnimation,ImageMagickWriter
 from sys import platform
-
 from _polyomino_builder import PolyominoBuilder
-
-
-
 
     
 ## WRAPPER SECTION ##
@@ -40,7 +34,6 @@ def GraphAssemblyOutcome(genotype):
         return Poly_Lib.Graph_Assembly_Outcome(len(genotype),genotype_Pointer)
     else:
         return "Unable to load cdll properly"
-
 
 def get_lib():
     return Poly_Lib
@@ -70,12 +63,11 @@ def GenerateBDGenotype(genome_length,colours=-1,max_attempts=1000):
 ERROR_CODES={0:'Steric Mismatch',-1:'Disjointed Genotype',-2:'Double Branching Point',-3:'Invalid SIFE',-4:'Disjointed Branching Point',-5:'Infinite Internal Loop',-6:'Internal Branching Point',-7:'Multiple Internal Loops',-8:'Single Tile Branching Point',-9:'External Infinite Loop',-10:'Uncuttable Infinite Loop',-11:'Irreducible Loops',-12:'No Loops',-13:'Unbounded Loop Growth'}
 
 def LabelTile(ax,tile,position,rotation):
-    for (x,y,i) in zip([0.475,0.1,0.475,0.85],[0.85,0.475,0.1,0.475],range(4)):
-        ax.text(x+position[0],y+position[1],str(tile[(i+rotation)%4]), verticalalignment='center', horizontalalignment='center',rotation=-90*rotation)
+    for (x,y,i) in zip([0.475,0.85,0.475,0.1],[0.85,0.475,0.1,0.475],range(4)):
+        ax.text(x+position[0],y+position[1],str(tile[(4+i-rotation)%4]), verticalalignment='center', horizontalalignment='center',rotation=-90*rotation)
 
 def SetTightBounds(ax,data):
     plt.axis([min([i[0][0][0] for i in data])-0.25,max([i[0][0][0] for i in data])+1.25,min([i[0][0][1] for i in data])-0.25,max([i[0][0][1] for i in data])+1.25])
-    
 
 def GrowPoly(genotype,tile_labels=True,growing=False,build_strategy='random',write_it=False,fps_par=1.25):
     assert(len(genotype)%4==0),  "Genotype length is invalid, each tile must have 4 faces"
@@ -154,7 +146,7 @@ def GrowPoly(genotype,tile_labels=True,growing=False,build_strategy='random',wri
     if not growing:
         SetTightBounds(ax,data)
         
-    anim = FuncAnimation(fig, AnimateBuild,init_func=init,frames=len(data)*2+5, interval=200, blit=False,repeat=False)
+    anim = FuncAnimation(fig, AnimateBuild,init_func=init,frames=len(data)*2+5, interval=800, blit=False,repeat=False)
     #plt.tight_layout()
     fig.set_tight_layout(True)
     

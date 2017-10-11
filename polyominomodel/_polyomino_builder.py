@@ -5,20 +5,32 @@ from copy import copy
 ## UTILS ##
 
 def cycleList(inputList,numCycles):
+    """Cyclicly rotates list by numCycles times clockwise"""
     return inputList[-numCycles:] + inputList[:-numCycles]
 
 def InteractionMatrix(input_face):
+    """Conjugate face according to asymmetric definitions"""
     return  (1-input_face%2)*(input_face-1)+(input_face%2)*(input_face+1) if input_face>0 else input_face
 
 ## END UTILS ##
 
 ## POLYOMINO BUILDER ##
 
-def PolyominoBuilder(genotype,build_strategy='random'):
-    SIZE_LIMIT=len(genotype)**2
+def PolyominoBuilder(genotype,build_strategy='random',size_threshold=-1):
+    """
+    Generator which builds the SLAM phenotype for a given genotype
+
+    genotype: the genotype to build
+    build_strategy: 'random'/'dfs' (depth first) /'bfs'(breadth first), how new tiles are placed
+    size_threshold: max tiles allowed assembly
+    
+    yields the new tile position and the updated potential tiles
+    """
+    if size_threshold<=0:
+        size_threshold=(len(genotype)**2)/2.
+        
     POLYOMINO_GRID=defaultdict(tuple)
     POSSIBLE_GRID=defaultdict(list)
-    IMPOSSIBLE_GRID=set()
     TILE_TYPES=[genotype[i:i+4] for i in xrange(0, len(genotype), 4)]
 
     if build_strategy=='dfs' or build_strategy=='bfs':
@@ -32,19 +44,17 @@ def PolyominoBuilder(genotype,build_strategy='random'):
 
     def identifyValidNeighbours(position):
         centerType,centerOrientation=POLYOMINO_GRID[position]
-        identifyValidNeighbour(position,centerType,centerOrientation,(position[0],position[1]+1),0)#Check Top
-        identifyValidNeighbour(position,centerType,centerOrientation,(position[0]+1,position[1]),1)#Check Right
-        identifyValidNeighbour(position,centerType,centerOrientation,(position[0],position[1]-1),2)#Check Bottom
-        identifyValidNeighbour(position,centerType,centerOrientation,(position[0]-1,position[1]),3)#Check Left
+        for (x,y,i) in zip([0,1,0,-1],[1,0,-1,0],range(4)):
+            identifyValidNeighbour(position,centerType,centerOrientation,(position[0]+x,position[1]+y),i)#
+
                 
     def identifyValidNeighbour(position,centerType,centerOrientation,checkPosition,increment):
         if checkPosition in POLYOMINO_GRID:
             return False
         bindingEdge=cycleList(TILE_TYPES[centerType],centerOrientation)[increment]
-        oppositeBindingEdgeIndex=(increment+2)%4
         for i,tile in enumerate(TILE_TYPES):
             for cycNum in xrange(4):
-                if bindingEdge!=0 and cycleList(tile,cycNum)[oppositeBindingEdgeIndex]==InteractionMatrix(bindingEdge):
+                if bindingEdge and cycleList(tile,cycNum)[(increment+2)%4]==InteractionMatrix(bindingEdge):
                     POSSIBLE_GRID[checkPosition].append((i,cycNum))
                     if build_strategy=='dfs' or build_strategy=='bfs':
                         if checkPosition not in possible_grid_order:
@@ -53,8 +63,6 @@ def PolyominoBuilder(genotype,build_strategy='random'):
                             if build_strategy=='dfs':
                                 possible_grid_order.remove(checkPosition)
                                 possible_grid_order.append(checkPosition)
-                            else:
-                                pass
 
     placement=placeTile(0,(0,0),0)
     identifyValidNeighbours((0,0))
@@ -67,11 +75,10 @@ def PolyominoBuilder(genotype,build_strategy='random'):
         elif build_strategy=='bfs':
             newPolyominoPosition,newPolyominoDetails= (possible_grid_order[0],POSSIBLE_GRID[possible_grid_order.pop(0)][0])
 
-
         POSSIBLE_GRID.pop(newPolyominoPosition)
         placement= placeTile(newPolyominoDetails[0],newPolyominoPosition,newPolyominoDetails[1])
         identifyValidNeighbours(newPolyominoPosition)
-        if len(POLYOMINO_GRID)>SIZE_LIMIT:
+        if len(POLYOMINO_GRID)>size_threshold:
             return
         else:
             yield placement,copy(POSSIBLE_GRID)
