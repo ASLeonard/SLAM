@@ -1,4 +1,5 @@
 import polyominomodel as pm
+import pytest
     
 def test_grow_unlabelled():
     success=True
@@ -22,8 +23,8 @@ def test_genotype_generator():
 def test_BD_genotype_generator():
     pm.GenerateBDGenotype(2)
 
-def test_analysis():
-    print "cdll loading from ",pm._polyomino_animator.abspath
-    assert(type(pm.GraphAssemblyOutcome(pm.GenerateGenotype(3)))==int), "Did not load CDLL properly"
+#def test_analysis():
+#    print "cdll loading from ",pm._polyomino_animator.abspath
+#    assert(type(pm.GraphAssemblyOutcome(pm.GenerateGenotype(3)))==int), "Did not load CDLL properly"
     
 
