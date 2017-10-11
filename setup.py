@@ -25,18 +25,21 @@ exec(open(os.path.join(here, 'polyominomodel/_version.py')).read())
 
 
 class PyTest(Command):
-    user_options = [('pytest-args=', 'a', 'Arguments to pass to pytest')]
+    user_options = []
+    pytest_args=''
 
     def initialize_options(self):
-        TestCommand.initialize_options(self)
-        self.pytest_args = ''
+        pass
 
-    def run_tests(self):
-        import shlex
-        #import here, cause outside the eggs aren't loaded
-        import pytest
+    def finalize_options(self):
+        pass
+
+    def run(self):
+	import shlex
+	import pytest
         errno = pytest.main(shlex.split(self.pytest_args))
         sys.exit(errno)
+
 	
 
 setup(
@@ -44,7 +47,6 @@ setup(
     version             = __version__,
     author              = 'AS Leonard',
     packages            = ['polyominomodel'],
-    tests_require       = ['pytest'],
     cmdclass            = {'test': PyTest},
     author_email        = 'asl47@cam.ac.uk',
     description         = 'Various polyomino methods',
