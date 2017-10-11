@@ -1,6 +1,6 @@
 from collections import defaultdict
 from random import choice
-from copy import copy
+from copy import deepcopy
 
 ## UTILS ##
 
@@ -55,6 +55,8 @@ def PolyominoBuilder(genotype,build_strategy='random',size_threshold=-1):
         for i,tile in enumerate(TILE_TYPES):
             for cycNum in xrange(4):
                 if bindingEdge and cycleList(tile,cycNum)[(increment+2)%4]==InteractionMatrix(bindingEdge):
+                    if (i,cycNum) in POSSIBLE_GRID[checkPosition]:
+                        continue
                     POSSIBLE_GRID[checkPosition].append((i,cycNum))
                     if build_strategy=='dfs' or build_strategy=='bfs':
                         if checkPosition not in possible_grid_order:
@@ -66,7 +68,7 @@ def PolyominoBuilder(genotype,build_strategy='random',size_threshold=-1):
 
     placement=placeTile(0,(0,0),0)
     identifyValidNeighbours((0,0))
-    yield placement,copy(POSSIBLE_GRID)
+    yield placement,deepcopy(POSSIBLE_GRID)
     while len(POSSIBLE_GRID)>0:
         if build_strategy=='random':
             newPolyominoPosition,newPolyominoDetails=choice([(position, tileDetail) for position, tileDetails in POSSIBLE_GRID.iteritems() for tileDetail in tileDetails])
@@ -81,6 +83,6 @@ def PolyominoBuilder(genotype,build_strategy='random',size_threshold=-1):
         if len(POLYOMINO_GRID)>size_threshold:
             return
         else:
-            yield placement,copy(POSSIBLE_GRID)
+            yield placement,deepcopy(POSSIBLE_GRID)
 
 ## END POLYOMINO BUILDER ##

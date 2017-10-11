@@ -69,7 +69,19 @@ def LabelTile(ax,tile,position,rotation):
 def SetTightBounds(ax,data):
     plt.axis([min([i[0][0][0] for i in data])-0.25,max([i[0][0][0] for i in data])+1.25,min([i[0][0][1] for i in data])-0.25,max([i[0][0][1] for i in data])+1.25])
 
-def GrowPoly(genotype,tile_labels=True,growing=False,build_strategy='random',write_it=False,fps_par=1.25):
+def GrowPoly(genotype,tile_labels=True,growing=False,build_strategy='random',fps_interactive=300,write_it=False,fps_write=1.25):
+    """
+    Animates the assembly of the given genotype according to the SLAM
+
+    genotype: list(int) -> genotype to assemble
+    tile_labels: bool -> label the faces on the tiles
+    growing: bool -> zoom out as the assembly grows
+    build_strategy: string (random, dfs,bfs) -> how the next tile is selected (random, depth, breadth)
+    fps_interactive: float -> milliseconds between frames
+    write_it: string -> filename to save gif as
+    fps_write: flaot -> number of frames per second
+    """
+
     assert(len(genotype)%4==0),  "Genotype length is invalid, each tile must have 4 faces"
     assert(len(genotype)<=40), "Very long genotype, currently not allowed"
 
@@ -94,6 +106,8 @@ def GrowPoly(genotype,tile_labels=True,growing=False,build_strategy='random',wri
 
     temporary_tiles=[]
     data=list(PolyominoBuilder(genotype,build_strategy))
+    for x in data:
+        print x
     def AnimateBuild(i):
         if i and growing:
             SetTightBounds(ax,data[:i])
@@ -139,14 +153,14 @@ def GrowPoly(genotype,tile_labels=True,growing=False,build_strategy='random',wri
                 temporary_tiles.pop().remove()
             for key in data[i/2-1][1]:
                 potential_tiles=[t_type[0] for t_type in data[i/2-1][1][key]]
-                for j,pt in enumerate(set(potential_tiles)):
+                for j,pt in enumerate(potential_tiles):
                     temporary_tiles.append(Rectangle(key,0.95,0.95,fill=True,alpha=0.25,facecolor=COLORS[pt],edgecolor='k',lw=2,hatch=HATCHES[j%7]))
                     ax.add_patch(temporary_tiles[-1])   
 
     if not growing:
         SetTightBounds(ax,data)
         
-    anim = FuncAnimation(fig, AnimateBuild,init_func=init,frames=len(data)*2+5, interval=800, blit=False,repeat=False)
+    anim = FuncAnimation(fig, AnimateBuild,init_func=init,frames=len(data)*2+5, interval=fps_interactive, blit=False,repeat=False)
     #plt.tight_layout()
     fig.set_tight_layout(True)
     
