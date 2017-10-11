@@ -15,10 +15,7 @@ matrix:
     - os: osx
       sudo: required
       language: generic
-
-#  Manually install python on osx
-before_install: 
-  
+ 
     
 install: 
   - pip install matplotlib 
