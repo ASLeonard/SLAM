@@ -2,6 +2,7 @@
 
 Note this module is dependent on
 > matplotlib
+
 > c++11 (and a suitably recent compiler)
 
 
@@ -10,12 +11,17 @@ Note this module is dependent on
 This should work
 ```bash
 cd /path/to/download
-tar xvzf SLAM-0.2.0.tar.gz (or otherwise extract it)
-cd /SLAM-0.2.0
+tar xvzf SLAM-(VERSION)tar.gz (or otherwise extract it)
+cd /SLAM-(VERSION)
 python setup.py install --user 
 ```
 ignore the compiler warnings
 
+additionally this seems to work (and is more safe(?))
+```bash
+cd /path/to/download (containing only the compressed download)
+pip install . --user
+```
 ---
 
 ## Usage
