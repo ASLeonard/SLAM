@@ -42,7 +42,7 @@ int Graph_Analysis(std::vector<int> genotype) {
       return 1;
   
   if(Double_BP_Check(genotype))
-    return -1;
+    return -2;
   
   int SIF_result=SIF_Elimination(genotype);
   if(SIF_result!=0)
@@ -873,58 +873,3 @@ double Shape_Matching_Fitness_Function(std::vector<int>& Spatial_Occupation,int&
     return *std::max_element(Fitness_Overlaps.begin(), Fitness_Overlaps.end());
   
 }
-
-/*
-int SpiralCoordinate(int x, int y) {
-  int diag_coord;
-  if(abs(x) > abs(y))
-    diag_coord=x;
-  else {
-    if(abs(y) > abs(x))
-      diag_coord=y;
-    else
-      diag_coord= x>0? std::min(x,y) : std::max(x,y);
-  }
-  int diag_offset=4*diag_coord*diag_coord-2*diag_coord;
-  if(x+y>0)
-    return diag_offset+(y-x);
-  else {
-    if(x+y<0)
-      return diag_offset-(y-x);
-    else {
-      return x>y? diag_offset+(x-y) : diag_offset+(y-x); 
-    }      
-  }    
-}
-double StericNew(std::vector<int>& genome) {
-  std::vector<int> tilesInformation{0,0,0,0};
-  std::vector<int> processing_queue{0,0,0};
-  int new_x=0, new_y=0, new_interaction=0,
-  //initial check
-  int X_OFFSET,Y_OFFSET;
-  for(int face=0; face<4;++face) {
-    if(genome[face]) {
-      switch(face) {
-      case 0:
-        X_OFFSET=0;Y_OFFSET=1;
-        break;
-      case 1:
-        X_OFFSET=1;Y_OFFSET=0;
-        break;
-      case 2:
-        X_OFFSET=0;Y_OFFSET=-1;
-        break;
-      case 3:
-        X_OFFSET=-1;Y_OFFSET=0;
-        break;
-      }
-      processing_queue.insert(processing_queue.end(),{X_OFFSET,Y_OFFSET,Interaction_Matrix(genome[face])})l
-    }
-    while(!proccessing_queue.empty()) {
-      new_interaction=processing_queue.back();processing_queue.pop_back();
-      new_y=processing_queue.back();processing_queue.pop_back();
-      new_x=processing_queue.back();processing_queue.pop_back();
-    }
-  }
-}
-*/
